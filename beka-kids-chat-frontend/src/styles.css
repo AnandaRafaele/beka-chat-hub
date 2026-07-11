@@ -1,0 +1,5 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-beka-pink: #ff69b4;
+}
