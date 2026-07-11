@@ -1,0 +1,61 @@
+<div
+  class="min-h-dvh w-full bg-gradient-to-br from-[#ffe8dc] via-[#fff5f0] to-[#eef9f4] font-sans text-beka-ink"
+>
+  <div class="mx-auto flex min-h-dvh max-w-2xl flex-col gap-5 px-4 py-6 sm:gap-6 sm:px-6 sm:py-8">
+    <header class="animate-rise text-center">
+      <p
+        class="font-display bg-gradient-to-br from-beka-deep via-beka-coral to-beka-blush bg-clip-text text-[clamp(2.25rem,8vw,3.25rem)] font-semibold leading-none tracking-tight text-transparent"
+      >
+        Beka Kids
+      </p>
+      <h1 class="font-display mt-1.5 text-lg font-medium text-beka-soft">Atendimento</h1>
+      <p class="mt-1.5 text-[0.95rem] text-beka-soft/90">
+        Tire dúvidas, acompanhe pedidos ou fale com a gente.
+      </p>
+    </header>
+
+    <section
+      class="animate-rise flex min-h-0 flex-1 flex-col overflow-hidden rounded-3xl bg-white/90 shadow-[0_18px_50px_rgb(42_31_26_/0.12)] backdrop-blur-[10px]"
+      aria-label="Conversa com Beka Kids"
+      style="animation-delay: 80ms"
+    >
+      <div
+        #messageList
+        class="flex flex-1 flex-col gap-3 overflow-y-auto scroll-smooth p-5 sm:p-6"
+        role="log"
+        aria-live="polite"
+      >
+        @for (message of messages(); track message.id) {
+          <div [class]="bubbleClass[message.role]">
+            <p class="m-0 text-[0.98rem] leading-snug">{{ message.text }}</p>
+          </div>
+        }
+      </div>
+
+      <form
+        class="flex items-end gap-2.5 border-t border-beka-ink/10 bg-beka-paper px-4 py-3.5"
+        (ngSubmit)="send()"
+      >
+        <label class="sr-only" for="chat-input">Sua mensagem</label>
+        <textarea
+          id="chat-input"
+          class="max-h-28 min-h-11 flex-1 resize-none rounded-2xl border-2 border-transparent bg-white px-4 py-3 font-sans text-beka-ink shadow-[inset_0_0_0_1px_rgb(42_31_26_/0.1)] transition-[border-color,box-shadow] placeholder:text-beka-soft/65 focus:border-beka-blush focus:shadow-[0_0_0_3px_rgb(255_143_184_/0.28)] focus:outline-none"
+          rows="1"
+          placeholder="Digite 1, 2 ou 3… ou escreva sua mensagem"
+          [ngModel]="draft()"
+          (ngModelChange)="draft.set($event)"
+          (keydown)="onKeydown($event)"
+          name="draft"
+          autocomplete="off"
+        ></textarea>
+        <button
+          class="h-11 shrink-0 cursor-pointer rounded-full bg-gradient-to-br from-beka-blush to-beka-deep px-5 font-sans font-bold text-white transition-[transform,filter,opacity] hover:enabled:-translate-y-px hover:enabled:brightness-105 active:enabled:translate-y-0 disabled:cursor-not-allowed disabled:opacity-45"
+          type="submit"
+          [disabled]="!draft().trim()"
+        >
+          Enviar
+        </button>
+      </form>
+    </section>
+  </div>
+</div>
