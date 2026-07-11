@@ -30,6 +30,7 @@ fastify.ready(err => {
 
         // Cliente entra em estágio inicial ("triagem")
         clientStates[socket.id] = { stage: 'triage' };
+        socket.emit('server_message', INITIAL_MENU);
 
         // Recebe mensagens do cliente
         socket.on('client_message', message => {

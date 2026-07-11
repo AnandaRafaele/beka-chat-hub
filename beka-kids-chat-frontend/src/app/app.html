@@ -1,5 +1,40 @@
-<main>
-  <h1>{{ title }}</h1>
-  <p>Frontend Angular pronto. UI de chat na próxima etapa.</p>
-  <router-outlet />
-</main>
+<div class="shell">
+  <header class="brand">
+    <p class="brand-mark">Beka Kids</p>
+    <h1 class="brand-title">Atendimento</h1>
+    <p class="brand-sub">Tire dúvidas, acompanhe pedidos ou fale com a gente.</p>
+  </header>
+
+  <section class="chat" aria-label="Conversa com Beka Kids">
+    <div class="messages" #messageList role="log" aria-live="polite">
+      @for (message of messages(); track message.id) {
+        <div
+          class="bubble"
+          [class.bubble--user]="message.role === 'user'"
+          [class.bubble--bot]="message.role === 'bot'"
+          [class.bubble--system]="message.role === 'system'"
+        >
+          <p class="bubble-text">{{ message.text }}</p>
+        </div>
+      }
+    </div>
+
+    <form class="composer" (ngSubmit)="send()">
+      <label class="sr-only" for="chat-input">Sua mensagem</label>
+      <textarea
+        id="chat-input"
+        class="composer-input"
+        rows="1"
+        placeholder="Digite 1, 2 ou 3… ou escreva sua mensagem"
+        [ngModel]="draft()"
+        (ngModelChange)="draft.set($event)"
+        (keydown)="onKeydown($event)"
+        name="draft"
+        autocomplete="off"
+      ></textarea>
+      <button class="composer-send" type="submit" [disabled]="!draft().trim()">
+        Enviar
+      </button>
+    </form>
+  </section>
+</div>

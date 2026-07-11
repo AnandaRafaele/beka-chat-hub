@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, ReplaySubject } from 'rxjs';
 import { io, Socket } from 'socket.io-client';
 
 @Injectable({
@@ -7,9 +7,13 @@ import { io, Socket } from 'socket.io-client';
 })
 export class Chat {
   private readonly socket: Socket;
+  private readonly messages$ = new ReplaySubject<string>(1);
 
   constructor() {
     this.socket = io('http://localhost:3000');
+    this.socket.on('server_message', (data: string) => {
+      this.messages$.next(data);
+    });
   }
 
   public sendMessage(message: string): void {
@@ -17,12 +21,6 @@ export class Chat {
   }
 
   public getMessages(): Observable<string> {
-    return new Observable((subscriber) => {
-      const handler = (data: string) => subscriber.next(data);
-      this.socket.on('server_message', handler);
-      return () => {
-        this.socket.off('server_message', handler);
-      };
-    });
+    return this.messages$.asObservable();
   }
 }
