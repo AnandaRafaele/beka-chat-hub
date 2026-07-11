@@ -2,4 +2,51 @@
 
 @theme {
   --color-beka-pink: #ff69b4;
+  --color-beka-blush: #ff8fb8;
+  --color-beka-deep: #e85a8c;
+  --color-beka-peach: #ffd6c0;
+  --color-beka-mint: #c8f0e0;
+  --color-beka-ink: #2a1f1a;
+  --color-beka-soft: #5c4a42;
+  --color-beka-paper: #fff8f3;
+  --color-beka-bot: #fff0e8;
+  --color-beka-coral: #ff7a45;
+
+  --font-display: 'Fredoka', 'Nunito', sans-serif;
+  --font-sans: 'Nunito', 'Segoe UI', sans-serif;
+
+  --animate-rise: rise 0.7s ease-out both;
+  --animate-pop: pop 0.35s ease-out both;
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes pop {
+    from {
+      opacity: 0;
+      transform: translateY(8px) scale(0.98);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
 }
