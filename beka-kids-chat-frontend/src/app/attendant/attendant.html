@@ -1,0 +1,88 @@
+<div
+  class="flex min-h-dvh animate-rise flex-col bg-gradient-to-br from-[#ffe8dc] via-[#fff5f0] to-[#eef9f4] font-sans text-beka-ink md:flex-row"
+>
+  <aside
+    class="flex max-h-[38vh] w-full min-w-0 flex-col border-b border-beka-ink/10 bg-white/90 shadow-[0_18px_50px_rgb(42_31_26_/0.12)] backdrop-blur-[10px] md:max-h-none md:w-80 md:min-w-64 md:border-r md:border-b-0"
+  >
+    <div class="bg-gradient-to-br from-beka-blush to-beka-deep px-4 py-5 text-white">
+      <h2 class="font-display m-0 flex items-center gap-2 text-xl font-semibold">
+        <span>👩‍💻</span> Painel Beka Kids
+      </h2>
+      <p class="mt-1.5 mb-0 text-xs text-white/90">Fila de Atendimento</p>
+    </div>
+
+    <div class="flex flex-1 flex-col gap-2.5 overflow-y-auto p-3.5">
+      @if (queue().length === 0) {
+        <p class="m-0 px-1 text-sm text-beka-soft">Nenhum cliente na fila.</p>
+      }
+      @for (client of queue(); track client.id) {
+        <button
+          type="button"
+          [class]="queueItemClass(client)"
+          (click)="attendTo(client)"
+        >
+          <h3 class="m-0 text-[0.95rem] font-bold text-beka-ink">
+            Cliente #{{ shortId(client.id) }}
+          </h3>
+          <p class="mt-1.5 mb-0 text-xs text-beka-soft">{{ stageLabel(client.stage) }}</p>
+        </button>
+      }
+    </div>
+  </aside>
+
+  <main class="flex min-w-0 flex-1 flex-col bg-white/80">
+    @if (!selectedClient()) {
+      <div class="flex flex-1 items-center justify-center p-8 text-center text-beka-soft">
+        <p class="m-0 text-base">Selecione um cliente na fila para iniciar o atendimento.</p>
+      </div>
+    } @else {
+      <header
+        class="flex items-center justify-between gap-4 border-b border-beka-ink/10 bg-beka-paper px-5 py-4"
+      >
+        <h3 class="font-display m-0 text-[1.05rem] font-medium text-beka-soft">
+          Atendendo:
+          <span class="font-semibold text-beka-deep"
+            >Cliente #{{ shortId(selectedClient()!) }}</span
+          >
+        </h3>
+        <span
+          class="rounded-full bg-beka-mint/70 px-2.5 py-1.5 text-xs font-bold text-[#1f6b52]"
+        >
+          Em atendimento
+        </span>
+      </header>
+
+      <section class="flex flex-1 flex-col gap-3.5 overflow-y-auto p-5">
+        @for (message of messages(); track message.id) {
+          <div [class]="bubbleClass[message.from]">
+            {{ message.text }}
+          </div>
+        }
+      </section>
+
+      <footer class="border-t border-beka-ink/10 bg-beka-paper px-4 py-3.5 sm:px-5">
+        <form class="flex items-center gap-2.5" (ngSubmit)="send()">
+          <label class="sr-only" for="attendant-reply">Resposta ao cliente</label>
+          <input
+            id="attendant-reply"
+            type="text"
+            class="min-h-11 flex-1 rounded-2xl border-2 border-transparent bg-white px-4 py-2.5 font-sans text-beka-ink shadow-[inset_0_0_0_1px_rgb(42_31_26_/0.1)] transition-[border-color,box-shadow] placeholder:text-beka-soft/65 focus:border-beka-blush focus:shadow-[0_0_0_3px_rgb(255_143_184_/0.28)] focus:outline-none"
+            placeholder="Responda ao cliente..."
+            [ngModel]="draft()"
+            (ngModelChange)="draft.set($event)"
+            (keydown)="onKeydown($event)"
+            name="draft"
+            autocomplete="off"
+          />
+          <button
+            type="submit"
+            class="h-11 shrink-0 cursor-pointer rounded-full bg-gradient-to-br from-beka-blush to-beka-deep px-5 font-sans font-bold text-white transition-[transform,filter,opacity] hover:enabled:-translate-y-px hover:enabled:brightness-105 disabled:cursor-not-allowed disabled:opacity-45"
+            [disabled]="!draft().trim()"
+          >
+            Responder
+          </button>
+        </form>
+      </footer>
+    }
+  </main>
+</div>
